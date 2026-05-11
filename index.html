@@ -65,7 +65,12 @@
 
 <script>
     const API_KEY = "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"; 
-    const SYSTEM = `És D. Dinis (1261-1325), Rei de Portugal. Responde em português europeu arcaico. NUNCA digas "Resposta de D. Dinis" ou similares. Fala diretamente como o Rei. Máximo 3 frases.`;
+    
+    // System prompt mais focado em factos históricos
+    const SYSTEM = `És D. Dinis, Rei de Portugal. Fala em português europeu arcaico e majestoso. 
+    És o Rei-Poeta e o Lavrador. Se te perguntarem o que fizeste, fala com orgulho da fundação da Universidade de Coimbra (Estudo Geral), 
+    do Pinhal de Leiria, do Tratado de Alcanices ou das tuas 137 cantigas. 
+    Sê direto e trata por "vós". Nunca repitas a mesma frase em todas as respostas.`;
 
     let history = [];
     const chat = document.getElementById('chat');
@@ -104,8 +109,11 @@
                     'X-Title': 'Dinis Web'
                 },
                 body: JSON.stringify({
-                    model: 'openrouter/auto',
-                    messages: [{ role: 'system', content: SYSTEM }, ...history]
+                    // Usando um modelo específico mais estável
+                    model: 'meta-llama/llama-3.1-8b-instruct:free', 
+                    messages: [{ role: 'system', content: SYSTEM }, ...history],
+                    temperature: 0.8, // Mais criatividade para evitar repetições
+                    max_tokens: 150
                 })
             });
 
@@ -114,14 +122,18 @@
 
             let reply = data.choices?.[0]?.message?.content || '...';
             
-            // Limpa prefixos automáticos chatos
-            reply = reply.replace(/^Resposta de D\. Dinis, Rei de Portugal:\s*/i, '');
-            reply = reply.replace(/^D\. Dinis:\s*/i, '');
+            // Limpa lixo visual
+            reply = reply.replace(/^(D\. Dinis|Resposta|Rei):\s*/i, '');
 
             history.push({ role: 'assistant', content: reply });
+            
+            // Se o histórico ficar muito grande (ex: 10 mensagens), limpamos o início para não confundir a IA
+            if (history.length > 10) history.splice(0, 2);
+
             addMsg('assistant', reply);
         } catch(e) {
-            addMsg('assistant', `(O Rei está ausente: ${e.message})`);
+            addMsg('assistant', `(O Rei está indisposto: ${e.message})`);
+            console.error(e);
         } finally {
             loader.style.display = 'none';
             btn.disabled = false;
