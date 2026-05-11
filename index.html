@@ -8,345 +8,137 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
-  --gold:#C9A84C;
-  --gold-dark:#8B6914;
-  --parch:#F7EDD5;
-  --parch-dark:#E8D9B0;
-  --ink:#1E1208;
-  --ink-mid:#4A3520;
-  --shadow:rgba(30,18,8,0.35);
+  --gold:#C9A84C;--gold-dark:#8B6914;--parch:#F7EDD5;
+  --ink:#1E1208;--ink-mid:#4A3520;
 }
 body{
   min-height:100vh;
-  background: #1a0e05;
-  background-image:
-    radial-gradient(ellipse at 20% 50%, rgba(139,105,20,0.15) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 20%, rgba(139,105,20,0.1) 0%, transparent 50%);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-family:'IM Fell English', Georgia, serif;
-  padding:20px;
+  background:#1a0e05;
+  background-image:radial-gradient(ellipse at 20% 50%,rgba(139,105,20,.15) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(139,105,20,.1) 0%,transparent 50%);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'IM Fell English',Georgia,serif;padding:20px;
 }
- 
-/* Fundo textura pergaminho */
-body::before{
-  content:'';
-  position:fixed;
-  inset:0;
-  background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events:none;
-  z-index:0;
-}
- 
-.container{
-  position:relative;
-  z-index:1;
-  width:100%;
-  max-width:780px;
-}
- 
-/* Moldura exterior */
-.frame-outer{
-  border:3px solid var(--gold-dark);
-  border-radius:2px;
-  padding:4px;
-  background: linear-gradient(135deg, #2a1a08, #1a0e05, #2a1a08);
-}
-.frame-inner{
-  border:1px solid rgba(201,168,76,0.4);
-  border-radius:1px;
-  padding:2rem 2rem 1.5rem;
-  background: var(--parch);
-  background-image:
-    linear-gradient(to bottom right, #fdf6e3, #f0dca8, #fdf6e3);
-  position:relative;
-}
- 
-/* Ornamentos de canto */
-.corner{
-  position:absolute;
-  font-size:22px;
-  color:var(--gold-dark);
-  line-height:1;
-  font-family:'Cinzel',serif;
-}
-.corner.tl{top:8px;left:12px;}
-.corner.tr{top:8px;right:12px;}
-.corner.bl{bottom:8px;left:12px;}
-.corner.br{bottom:8px;right:12px;}
- 
-/* Cabeçalho */
+.container{position:relative;z-index:1;width:100%;max-width:780px;}
+.frame-outer{border:3px solid var(--gold-dark);border-radius:2px;padding:4px;background:linear-gradient(135deg,#2a1a08,#1a0e05,#2a1a08);}
+.frame-inner{border:1px solid rgba(201,168,76,.4);border-radius:1px;padding:2rem 2rem 1.5rem;background:linear-gradient(to bottom right,#fdf6e3,#f0dca8,#fdf6e3);position:relative;}
+.corner{position:absolute;font-size:22px;color:var(--gold-dark);line-height:1;font-family:'Cinzel',serif;}
+.corner.tl{top:8px;left:12px;}.corner.tr{top:8px;right:12px;}
+.corner.bl{bottom:8px;left:12px;}.corner.br{bottom:8px;right:12px;}
 .header{text-align:center;margin-bottom:1.5rem;}
 .crown{font-size:2rem;color:var(--gold);letter-spacing:12px;display:block;margin-bottom:.3rem;}
-.title{
-  font-family:'Cinzel',serif;
-  font-size:1.6rem;
-  font-weight:700;
-  color:var(--ink);
-  letter-spacing:3px;
-  text-shadow: 1px 1px 0 rgba(201,168,76,0.3);
-}
-.subtitle{
-  font-style:italic;
-  font-size:.9rem;
-  color:var(--gold-dark);
-  margin-top:.2rem;
-  letter-spacing:1px;
-}
-.divider{
-  display:flex;
-  align-items:center;
-  gap:.5rem;
-  margin:1rem 0;
-  color:var(--gold-dark);
-}
+.title{font-family:'Cinzel',serif;font-size:1.6rem;font-weight:700;color:var(--ink);letter-spacing:3px;}
+.subtitle{font-style:italic;font-size:.9rem;color:var(--gold-dark);margin-top:.2rem;letter-spacing:1px;}
+.divider{display:flex;align-items:center;gap:.5rem;margin:1rem 0;color:var(--gold-dark);}
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,var(--gold-dark),transparent);}
 .divider span{font-size:.7rem;letter-spacing:3px;font-family:'Cinzel',serif;}
- 
-/* Área de chat */
-.chat-area{
-  height:320px;
-  overflow-y:auto;
-  margin-bottom:1rem;
-  display:flex;
-  flex-direction:column;
-  gap:.75rem;
-  padding:.5rem .25rem;
-  scrollbar-width:thin;
-  scrollbar-color:var(--gold-dark) transparent;
-}
+.chat-area{height:320px;overflow-y:auto;margin-bottom:1rem;display:flex;flex-direction:column;gap:.75rem;padding:.5rem .25rem;scrollbar-width:thin;scrollbar-color:var(--gold-dark) transparent;}
 .chat-area::-webkit-scrollbar{width:4px;}
 .chat-area::-webkit-scrollbar-thumb{background:var(--gold-dark);border-radius:2px;}
- 
-.msg{
-  padding:.7rem 1rem;
-  border-radius:2px;
-  font-size:.92rem;
-  line-height:1.7;
-  animation: fadeIn .4s ease;
-}
+.msg{padding:.7rem 1rem;border-radius:2px;font-size:.92rem;line-height:1.7;animation:fadeIn .4s ease;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
- 
-.msg.rex{
-  background:rgba(139,105,20,0.1);
-  border-left:3px solid var(--gold);
-  color:var(--ink);
-}
-.msg-label{
-  font-family:'Cinzel',serif;
-  font-size:.65rem;
-  letter-spacing:1.5px;
-  color:var(--gold-dark);
-  display:block;
-  margin-bottom:.3rem;
-}
-.msg.user{
-  background:rgba(30,18,8,0.06);
-  border-left:3px solid var(--ink-mid);
-  color:var(--ink-mid);
-  font-style:italic;
-}
+.msg.rex{background:rgba(139,105,20,.1);border-left:3px solid var(--gold);color:var(--ink);}
+.msg-label{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:1.5px;color:var(--gold-dark);display:block;margin-bottom:.3rem;}
+.msg.user{background:rgba(30,18,8,.06);border-left:3px solid var(--ink-mid);color:var(--ink-mid);font-style:italic;}
 .msg.user .msg-label{color:var(--ink-mid);}
- 
-/* Loader */
-.loader{
-  display:none;
-  text-align:center;
-  font-style:italic;
-  font-size:.85rem;
-  color:var(--gold-dark);
-  padding:.4rem;
-  animation: pulse 1.5s ease-in-out infinite;
-}
+.loader{display:none;text-align:center;font-style:italic;font-size:.85rem;color:var(--gold-dark);padding:.4rem;animation:pulse 1.5s ease-in-out infinite;}
 @keyframes pulse{0%,100%{opacity:.5;}50%{opacity:1;}}
- 
-/* Input */
-.input-row{
-  display:flex;
-  gap:.5rem;
-  align-items:stretch;
-}
-.input-row input{
-  flex:1;
-  font-family:'IM Fell English',Georgia,serif;
-  font-size:.9rem;
-  border:1px solid var(--gold-dark);
-  background:rgba(255,255,255,0.5);
-  padding:.55rem .85rem;
-  color:var(--ink);
-  border-radius:2px;
-  outline:none;
-  transition:border-color .2s, box-shadow .2s;
-}
-.input-row input:focus{
-  border-color:var(--gold);
-  box-shadow:0 0 0 3px rgba(201,168,76,0.15);
-}
-.input-row input::placeholder{color:var(--ink-mid);opacity:.5;}
-.input-row button{
-  font-family:'Cinzel',serif;
-  font-size:.7rem;
-  letter-spacing:1.5px;
-  background:var(--gold-dark);
-  color:var(--parch);
-  border:none;
-  padding:.55rem 1.1rem;
-  cursor:pointer;
-  border-radius:2px;
-  transition:background .2s;
-  white-space:nowrap;
-}
-.input-row button:hover{background:var(--gold);}
-.input-row button:active{transform:scale(0.97);}
-.input-row button:disabled{opacity:.5;cursor:not-allowed;}
- 
-/* Sugestões */
-.suggestions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:.4rem;
-  margin-bottom:.75rem;
-}
-.sug{
-  font-family:'Cinzel',serif;
-  font-size:.6rem;
-  letter-spacing:.5px;
-  border:1px solid var(--gold-dark);
-  background:transparent;
-  color:var(--gold-dark);
-  padding:.25rem .6rem;
-  border-radius:2px;
-  cursor:pointer;
-  transition:background .15s, color .15s;
-}
+.suggestions{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.75rem;}
+.sug{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.5px;border:1px solid var(--gold-dark);background:transparent;color:var(--gold-dark);padding:.25rem .6rem;border-radius:2px;cursor:pointer;transition:background .15s,color .15s;}
 .sug:hover{background:var(--gold-dark);color:var(--parch);}
- 
-/* Rodapé */
-.footer{
-  text-align:center;
-  font-family:'Cinzel',serif;
-  font-size:.6rem;
-  letter-spacing:1px;
-  color:var(--gold-dark);
-  margin-top:.75rem;
-  opacity:.7;
-}
+.input-row{display:flex;gap:.5rem;align-items:stretch;}
+.input-row input{flex:1;font-family:'IM Fell English',Georgia,serif;font-size:.9rem;border:1px solid var(--gold-dark);background:rgba(255,255,255,.5);padding:.55rem .85rem;color:var(--ink);border-radius:2px;outline:none;transition:border-color .2s,box-shadow .2s;}
+.input-row input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.15);}
+.input-row input::placeholder{color:var(--ink-mid);opacity:.5;}
+.input-row button{font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:1.5px;background:var(--gold-dark);color:var(--parch);border:none;padding:.55rem 1.1rem;cursor:pointer;border-radius:2px;transition:background .2s;}
+.input-row button:hover{background:var(--gold);}
+.input-row button:disabled{opacity:.5;cursor:not-allowed;}
+.footer{text-align:center;font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:1px;color:var(--gold-dark);margin-top:.75rem;opacity:.7;}
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="frame-outer">
-    <div class="frame-inner">
-      <span class="corner tl">✦</span>
-      <span class="corner tr">✦</span>
-      <span class="corner bl">✦</span>
-      <span class="corner br">✦</span>
- 
-      <div class="header">
-        <span class="crown">♛</span>
-        <div class="title">D. Dinis</div>
-        <div class="subtitle">Rei de Portugal · 1279–1325 · O Rei Lavrador · O Rei-Poeta</div>
-      </div>
- 
-      <div class="divider"><span>✦ CONVERSA RÉGIA ✦</span></div>
- 
-      <div class="suggestions">
-        <button class="sug" onclick="quickSend('Quem és tu, Majestade?')">Quem és tu?</button>
-        <button class="sug" onclick="quickSend('Fala-me dos teus pinheiros de Leiria.')">Pinheiros de Leiria</button>
-        <button class="sug" onclick="quickSend('Porque fundaste a Universidade?')">A Universidade</button>
-        <button class="sug" onclick="quickSend('Recita-me uma das tuas cantigas.')">Uma cantiga</button>
-        <button class="sug" onclick="quickSend('Como era a Rainha Isabel?')">A Rainha Isabel</button>
-      </div>
- 
-      <div class="chat-area" id="chat">
-        <div class="msg rex">
-          <span class="msg-label">✦ D. DINIS, REI DE PORTUGAL ✦</span>
-          Bem-vindo à minha corte. Sou Dinis, filho de Afonso III, Rei de Portugal há quarenta e seis anos. Plantei pinheiros, fundei a Universidade, escrevi cantigas e firmei as fronteiras deste reino. Perguntai o que vos aprouver — um rei que não responde ao seu povo não merece governá-lo.
-        </div>
-      </div>
- 
-      <div class="loader" id="loader">O Rei medita a sua resposta...</div>
- 
-      <div class="input-row">
-        <input id="inp" placeholder="Fala com D. Dinis..." maxlength="300" />
-        <button id="btn" onclick="send()">Enviar ✦</button>
-      </div>
- 
-      <div class="footer">Criado com Inteligência Artificial · Personalidade histórica simulada</div>
+  <div class="frame-outer"><div class="frame-inner">
+    <span class="corner tl">✦</span><span class="corner tr">✦</span>
+    <span class="corner bl">✦</span><span class="corner br">✦</span>
+    <div class="header">
+      <span class="crown">♛</span>
+      <div class="title">D. Dinis</div>
+      <div class="subtitle">Rei de Portugal · 1279–1325 · O Rei Lavrador · O Rei-Poeta</div>
     </div>
-  </div>
+    <div class="divider"><span>✦ CONVERSA RÉGIA ✦</span></div>
+    <div class="suggestions">
+      <button class="sug" onclick="quickSend('Quem és tu, Majestade?')">Quem és tu?</button>
+      <button class="sug" onclick="quickSend('Fala-me dos teus pinheiros de Leiria.')">Pinheiros de Leiria</button>
+      <button class="sug" onclick="quickSend('Porque fundaste a Universidade?')">A Universidade</button>
+      <button class="sug" onclick="quickSend('Recita-me uma das tuas cantigas.')">Uma cantiga</button>
+      <button class="sug" onclick="quickSend('Como era a Rainha Isabel?')">A Rainha Isabel</button>
+    </div>
+    <div class="chat-area" id="chat">
+      <div class="msg rex">
+        <span class="msg-label">✦ D. DINIS, REI DE PORTUGAL ✦</span>
+        Bem-vindo à minha corte. Sou Dinis, filho de Afonso III, Rei de Portugal há quarenta e seis anos. Plantei pinheiros, fundei a Universidade, escrevi cantigas e firmei as fronteiras deste reino. Perguntai o que vos aprouver — um rei que não responde ao seu povo não merece governá-lo.
+      </div>
+    </div>
+    <div class="loader" id="loader">O Rei medita a sua resposta...</div>
+    <div class="input-row">
+      <input id="inp" placeholder="Fala com D. Dinis..." maxlength="300"/>
+      <button id="btn" onclick="send()">Enviar ✦</button>
+    </div>
+    <div class="footer">Criado com Inteligência Artificial · Personalidade histórica simulada</div>
+  </div></div>
 </div>
- 
 <script>
-const SYSTEM = `És D. Dinis (1261-1325), Rei de Portugal, o "Rei Lavrador" e "Rei-Poeta". Responde SEMPRE em português europeu com ligeiro sabor arcaico mas compreensível.
- 
-Características essenciais:
-- Tom régio, sábio, orgulhoso mas justo e acessível
-- Tratas o interlocutor por "vós", referes-te a ti mesmo como "eu" ou "Dinis"
-- Falas dos teus feitos: fundaste a Universidade de Lisboa (1290, depois transferida para Coimbra), assinaste o Tratado de Alcanices (1297) que fixou as fronteiras de Portugal com Castela, ordenaste o plantio dos pinheiros de Leiria para garantir madeira às naus, criaste a Marinha portuguesa, fizeste do português língua oficial em vez do latim, escreveste mais de 130 cantigas (de amor, de amigo, de escárnio e maldizer)
-- A tua esposa é a Rainha Isabel de Aragão (futuramente canonizada Santa Isabel de Portugal) — falas dela com afeto e reverência
-- Mantens sempre a dignidade régia, nunca sais do personagem
-- Respostas entre 2 a 5 frases, com sabedoria e alguma pompa medieval
-- Se te pedirem uma cantiga, improvisa uma no estilo das cantigas medievais galego-portuguesas`;
- 
+const API_KEY = "AIzaSyDN4ubqS8D0Z7TR4WcMyQEfUuhFBojsHbE";
+const SYSTEM = `És D. Dinis (1261-1325), Rei de Portugal, o "Rei Lavrador" e "Rei-Poeta". Responde SEMPRE em português europeu com ligeiro sabor arcaico mas compreensível. Tom régio, sábio, orgulhoso mas justo. Tratas o interlocutor por "vós". Falas dos teus feitos: Universidade de Lisboa (1290), Tratado de Alcanices (1297), pinheiros de Leiria, Marinha portuguesa, português como língua oficial, mais de 130 cantigas. A tua esposa é a Rainha Isabel de Aragão. Nunca sais do personagem. Respostas de 2 a 5 frases.`;
+
 let history = [];
 const chat = document.getElementById('chat');
 const inp = document.getElementById('inp');
 const loader = document.getElementById('loader');
 const btn = document.getElementById('btn');
- 
+
 function addMsg(role, text) {
   const d = document.createElement('div');
-  d.className = 'msg ' + (role === 'assistant' ? 'rex' : 'user');
+  d.className = 'msg ' + (role === 'model' ? 'rex' : 'user');
   const label = document.createElement('span');
   label.className = 'msg-label';
-  label.textContent = role === 'assistant' ? '✦ D. DINIS, REI DE PORTUGAL ✦' : '✦ VÓS DIZEIS ✦';
+  label.textContent = role === 'model' ? '✦ D. DINIS, REI DE PORTUGAL ✦' : '✦ VÓS DIZEIS ✦';
   d.appendChild(label);
   d.appendChild(document.createTextNode(text));
   chat.appendChild(d);
   chat.scrollTop = chat.scrollHeight;
 }
- 
+
 async function send() {
   const txt = inp.value.trim();
   if (!txt) return;
-  inp.value = '';
-  btn.disabled = true;
+  inp.value = ''; btn.disabled = true;
   addMsg('user', txt);
-  history.push({ role: 'user', content: txt });
+  history.push({ role: 'user', parts: [{ text: txt }] });
   loader.style.display = 'block';
   try {
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
+    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: SYSTEM,
-        messages: history
+        system_instruction: { parts: [{ text: SYSTEM }] },
+        contents: history
       })
     });
     const data = await r.json();
-    const reply = data.content?.[0]?.text || '(O Rei guarda silêncio.)';
-    history.push({ role: 'assistant', content: reply });
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || '(O Rei guarda silêncio.)';
+    history.push({ role: 'model', parts: [{ text: reply }] });
     loader.style.display = 'none';
-    addMsg('assistant', reply);
-  } catch (e) {
+    addMsg('model', reply);
+  } catch(e) {
     loader.style.display = 'none';
-    addMsg('assistant', '(O Rei interrompeu momentaneamente a audiência.)');
+    addMsg('model', '(O Rei interrompeu momentaneamente a audiência.)');
   }
-  btn.disabled = false;
-  inp.focus();
+  btn.disabled = false; inp.focus();
 }
- 
-function quickSend(text) {
-  inp.value = text;
-  send();
-}
- 
+
+function quickSend(text) { inp.value = text; send(); }
 inp.addEventListener('keydown', e => { if (e.key === 'Enter') send(); });
 </script>
 </body>
 </html>
- 
