@@ -31,14 +31,9 @@
         .msg.user .msg-label{color:var(--ink-mid);}
         .loader{display:none;text-align:center;font-style:italic;font-size:.85rem;color:var(--gold-dark);padding:.4rem;animation:pulse 1.5s ease-in-out infinite;}
         @keyframes pulse{0%,100%{opacity:.5;}50%{opacity:1;}}
-        .suggestions{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.75rem;}
-        .sug{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.5px;border:1px solid var(--gold-dark);background:transparent;color:var(--gold-dark);padding:.25rem .6rem;border-radius:2px;cursor:pointer;transition:background .15s,color .15s;}
-        .sug:hover{background:var(--gold-dark);color:var(--parch);}
         .input-row{display:flex;gap:.5rem;align-items:stretch;}
-        .input-row input{flex:1;font-family:'IM Fell English',Georgia,serif;font-size:1rem;border:1px solid var(--gold-dark);background:rgba(255,255,255,.5);padding:.55rem .85rem;color:var(--ink);border-radius:2px;outline:none;transition:box-shadow .2s;}
-        .input-row input:focus{box-shadow:0 0 0 3px rgba(201,168,76,.15);border-color:var(--gold);}
-        .input-row button{font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:1.5px;background:var(--gold-dark);color:var(--parch);border:none;padding:.55rem 1.1rem;cursor:pointer;border-radius:2px;transition:background .2s;}
-        .input-row button:hover{background:var(--gold);}
+        .input-row input{flex:1;font-family:'IM Fell English',Georgia,serif;font-size:1rem;border:1px solid var(--gold-dark);background:rgba(255,255,255,.5);padding:.55rem .85rem;color:var(--ink);border-radius:2px;outline:none;}
+        .input-row button{font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:1.5px;background:var(--gold-dark);color:var(--parch);border:none;padding:.55rem 1.1rem;cursor:pointer;border-radius:2px;}
         .footer{text-align:center;font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:1px;color:var(--gold-dark);margin-top:.75rem;opacity:.7;}
     </style>
 </head>
@@ -53,32 +48,24 @@
             <div class="subtitle">Rei de Portugal · O Rei-Poeta · O Lavrador</div>
         </div>
         <div class="divider"><span>✦ CONVERSA RÉGIA ✦</span></div>
-        <div class="suggestions">
-            <button class="sug" onclick="quickSend('Quem és tu, Majestade?')">Quem és tu?</button>
-            <button class="sug" onclick="quickSend('Fala-me do Pinhal de Leiria.')">O Pinhal</button>
-            <button class="sug" onclick="quickSend('Como vai o Estudo Geral?')">A Universidade</button>
-            <button class="sug" onclick="quickSend('Recitai-me um verso vosso.')">Uma Cantiga</button>
-        </div>
         <div class="chat-area" id="chat">
             <div class="msg rex">
                 <span class="msg-label">✦ D. DINIS, REI DE PORTUGAL ✦</span>
-                Bem-vindo sejas à minha corte. Sou Dinis, Rei de Portugal e do Algarve. Perguntai com cortesia e eu, vosso Rei, responderei conforme a sabedoria que Deus me concedeu.
+                Bem-vindo sejas à minha corte. Sou Dinis, Rei de Portugal. Que desejais saber da minha governação ou das minhas cantigas?
             </div>
         </div>
-        <div class="loader" id="loader">O Rei está a redigir a resposta...</div>
+        <div class="loader" id="loader">O Rei está a redigir...</div>
         <div class="input-row">
             <input id="inp" placeholder="Escreve ao Rei..." maxlength="300"/>
             <button id="btn" onclick="send()">Enviar ✦</button>
         </div>
-        <div class="footer">Simulação histórica com Inteligência Artificial</div>
+        <div class="footer">Simulação histórica com IA</div>
     </div></div>
 </div>
 
 <script>
-    // IMPORTANTE: Insere a tua chave aqui
     const API_KEY = "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"; 
-    
-    const SYSTEM = `És D. Dinis (1261-1325), Rei de Portugal. Responde em português europeu culto, com um tom majestoso e arcaico. Tratas o interlocutor por "vós". És conhecido pelo Pinhal de Leiria, pela criação da Universidade e pelas tuas cantigas de amigo e de amor. Respostas breves (2-4 frases).`;
+    const SYSTEM = `És D. Dinis (1261-1325), Rei de Portugal. Responde em português europeu arcaico. NUNCA digas "Resposta de D. Dinis" ou similares. Fala diretamente como o Rei. Máximo 3 frases.`;
 
     let history = [];
     const chat = document.getElementById('chat');
@@ -102,8 +89,7 @@
         const txt = inp.value.trim();
         if (!txt || btn.disabled) return;
         
-        inp.value = ''; 
-        btn.disabled = true;
+        inp.value = ''; btn.disabled = true;
         addMsg('user', txt);
         history.push({ role: 'user', content: txt });
         loader.style.display = 'block';
@@ -114,41 +100,34 @@
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${API_KEY}`,
-                    'HTTP-Referer': window.location.origin, 
-                    'X-Title': 'Website Dom Dinis'
+                    'HTTP-Referer': window.location.origin,
+                    'X-Title': 'Dinis Web'
                 },
                 body: JSON.stringify({
                     model: 'openrouter/auto',
-                    messages: [
-                        { role: 'system', content: SYSTEM },
-                        ...history
-                    ],
-                    temperature: 0.7
+                    messages: [{ role: 'system', content: SYSTEM }, ...history]
                 })
             });
 
             const data = await r.json();
+            if (!r.ok) throw new Error(data.error?.message || 'Erro');
 
-            if (!r.ok) {
-                // Captura erros de autenticação ou de provedor
-                throw new Error(data.error?.message || `Erro ${r.status}`);
-            }
-
-            const reply = data.choices?.[0]?.message?.content || '(O Rei permanece em silêncio profundo.)';
+            let reply = data.choices?.[0]?.message?.content || '...';
             
+            // Limpa prefixos automáticos chatos
+            reply = reply.replace(/^Resposta de D\. Dinis, Rei de Portugal:\s*/i, '');
+            reply = reply.replace(/^D\. Dinis:\s*/i, '');
+
             history.push({ role: 'assistant', content: reply });
             addMsg('assistant', reply);
         } catch(e) {
-            console.error("Erro detalhado:", e);
-            addMsg('assistant', `(Lamentamos, mas o Rei foi chamado a outros afazeres: ${e.message})`);
+            addMsg('assistant', `(O Rei está ausente: ${e.message})`);
         } finally {
             loader.style.display = 'none';
             btn.disabled = false;
-            inp.focus();
         }
     }
 
-    function quickSend(text) { inp.value = text; send(); }
     inp.addEventListener('keydown', e => { if (e.key === 'Enter') send(); });
 </script>
 </body>
