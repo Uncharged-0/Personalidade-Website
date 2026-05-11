@@ -7,23 +7,13 @@
 <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-:root{
-  --gold:#C9A84C;--gold-dark:#8B6914;--parch:#F7EDD5;
-  --ink:#1E1208;--ink-mid:#4A3520;
-}
-body{
-  min-height:100vh;
-  background:#1a0e05;
-  background-image:radial-gradient(ellipse at 20% 50%,rgba(139,105,20,.15) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(139,105,20,.1) 0%,transparent 50%);
-  display:flex;align-items:center;justify-content:center;
-  font-family:'IM Fell English',Georgia,serif;padding:20px;
-}
+:root{--gold:#C9A84C;--gold-dark:#8B6914;--parch:#F7EDD5;--ink:#1E1208;--ink-mid:#4A3520;}
+body{min-height:100vh;background:#1a0e05;background-image:radial-gradient(ellipse at 20% 50%,rgba(139,105,20,.15) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(139,105,20,.1) 0%,transparent 50%);display:flex;align-items:center;justify-content:center;font-family:'IM Fell English',Georgia,serif;padding:20px;}
 .container{position:relative;z-index:1;width:100%;max-width:780px;}
 .frame-outer{border:3px solid var(--gold-dark);border-radius:2px;padding:4px;background:linear-gradient(135deg,#2a1a08,#1a0e05,#2a1a08);}
 .frame-inner{border:1px solid rgba(201,168,76,.4);border-radius:1px;padding:2rem 2rem 1.5rem;background:linear-gradient(to bottom right,#fdf6e3,#f0dca8,#fdf6e3);position:relative;}
 .corner{position:absolute;font-size:22px;color:var(--gold-dark);line-height:1;font-family:'Cinzel',serif;}
-.corner.tl{top:8px;left:12px;}.corner.tr{top:8px;right:12px;}
-.corner.bl{bottom:8px;left:12px;}.corner.br{bottom:8px;right:12px;}
+.corner.tl{top:8px;left:12px;}.corner.tr{top:8px;right:12px;}.corner.bl{bottom:8px;left:12px;}.corner.br{bottom:8px;right:12px;}
 .header{text-align:center;margin-bottom:1.5rem;}
 .crown{font-size:2rem;color:var(--gold);letter-spacing:12px;display:block;margin-bottom:.3rem;}
 .title{font-family:'Cinzel',serif;font-size:1.6rem;font-weight:700;color:var(--ink);letter-spacing:3px;}
@@ -88,7 +78,7 @@ body{
   </div></div>
 </div>
 <script>
-const API_KEY = "AIzaSyCKhJWMcronkVmLkdZ_BVKxTMyJ0wTcchk";
+const API_KEY = "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";
 const SYSTEM = `És D. Dinis (1261-1325), Rei de Portugal, o "Rei Lavrador" e "Rei-Poeta". Responde SEMPRE em português europeu com ligeiro sabor arcaico mas compreensível. Tom régio, sábio, orgulhoso mas justo. Tratas o interlocutor por "vós". Falas dos teus feitos: Universidade de Lisboa (1290), Tratado de Alcanices (1297), pinheiros de Leiria, Marinha portuguesa, português como língua oficial, mais de 130 cantigas. A tua esposa é a Rainha Isabel de Aragão. Nunca sais do personagem. Respostas de 2 a 5 frases.`;
 
 let history = [];
@@ -99,10 +89,10 @@ const btn = document.getElementById('btn');
 
 function addMsg(role, text) {
   const d = document.createElement('div');
-  d.className = 'msg ' + (role === 'model' ? 'rex' : 'user');
+  d.className = 'msg ' + (role === 'assistant' ? 'rex' : 'user');
   const label = document.createElement('span');
   label.className = 'msg-label';
-  label.textContent = role === 'model' ? '✦ D. DINIS, REI DE PORTUGAL ✦' : '✦ VÓS DIZEIS ✦';
+  label.textContent = role === 'assistant' ? '✦ D. DINIS, REI DE PORTUGAL ✦' : '✦ VÓS DIZEIS ✦';
   d.appendChild(label);
   d.appendChild(document.createTextNode(text));
   chat.appendChild(d);
@@ -114,25 +104,33 @@ async function send() {
   if (!txt) return;
   inp.value = ''; btn.disabled = true;
   addMsg('user', txt);
-  history.push({ role: 'user', parts: [{ text: txt }] });
+  history.push({ role: 'user', content: txt });
   loader.style.display = 'block';
   try {
-    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`, {
+    const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${API_KEY}`,
+        'HTTP-Referer': window.location.href,
+        'X-Title': 'D. Dinis Rei de Portugal'
+      },
       body: JSON.stringify({
-        system_instruction: { parts: [{ text: SYSTEM }] },
-        contents: history
+        model: 'meta-llama/llama-3.3-70b-instruct:free',
+        messages: [
+          { role: 'system', content: SYSTEM },
+          ...history
+        ]
       })
     });
     const data = await r.json();
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || '(O Rei guarda silêncio.)';
-    history.push({ role: 'model', parts: [{ text: reply }] });
+    const reply = data.choices?.[0]?.message?.content || '(O Rei guarda silêncio.)';
+    history.push({ role: 'assistant', content: reply });
     loader.style.display = 'none';
-    addMsg('model', reply);
+    addMsg('assistant', reply);
   } catch(e) {
     loader.style.display = 'none';
-    addMsg('model', '(O Rei interrompeu momentaneamente a audiência.)');
+    addMsg('assistant', '(O Rei interrompeu momentaneamente a audiência.)');
   }
   btn.disabled = false; inp.focus();
 }
